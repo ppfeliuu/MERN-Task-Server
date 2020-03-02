@@ -1,10 +1,10 @@
 //Router for users
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/usersController');
+const usersController = require('../controllers/usersController');
 
 //Create user
 //api/user
-router.post('/', userController.createUser);
+router.post('/', usersController.createUser);
 
 module.exports = router;

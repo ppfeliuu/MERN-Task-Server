@@ -42,7 +42,7 @@ exports.createTask = async (req, res) => {
 
 exports.getProjectTasks = async (req, res) => {
     try {
-        const { project } = req.body
+        const { project } = req.query
 
         const exitsProject = await Project.findById(project)
         if (!exitsProject) {
@@ -59,7 +59,7 @@ exports.getProjectTasks = async (req, res) => {
         }
 
         //Get task by projcect
-        const tasks = await Task.find({ project })
+        const tasks = await Task.find({ project }).sort({ created: -1 })
         res.json({ tasks })
     } catch (error) {
         console.log(error)
@@ -89,13 +89,9 @@ exports.updateTask = async (req, res) => {
         //Create a object with new info
         const newTask = {}
 
-        if (name) {
-            newTask.name = name
-        }
+        newTask.name = name
 
-        if (status) {
-            newTask.status = status
-        }
+        newTask.status = status
 
         task = await Task.findOneAndUpdate({ _id: req.params.id }, newTask, {
             new: true,
@@ -110,7 +106,7 @@ exports.updateTask = async (req, res) => {
 
 exports.deleteTask = async (req, res) => {
     try {
-        const { project } = req.body
+        const { project } = req.query
 
         let task = await Task.findById(req.params.id)
         if (!task) {
